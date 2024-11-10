@@ -1,7 +1,7 @@
 from ball import Purbleballs, Redballs, Metalballs
+from tree import *
 from whitecir import Whitecyrcle
 from colorama import Fore
-
 
 class Board :
     def __init__(self, n, board ):
@@ -13,7 +13,8 @@ class Board :
         for x in range(1,self.n+1):
             print (x, end=" ")
         print()
-        for i in range(1,self.n+1): 
+        for i in range(1,self.n+1):
+            print(Fore.RESET + "", end="")
             print(i, end=" ")
             for j in range(1,self.n+1):
                 printed = False 
@@ -96,7 +97,6 @@ class Board :
     def move(self, row, col, t_row, t_col):
             ball = self.can_move(t_row, t_col, row, col)
             if ball is None:
-                print("This is not a correct move")
                 return False
             new_board = []
             for element in self.b:
@@ -123,13 +123,12 @@ class Board :
                     w = Whitecyrcle(element.row, element.col)
                     new_board.append(w)
             b1 = Board(self.n, new_board)
-            rball.move(b1)
+            rball.move_effict(b1)
             return b1
 #_________________________________________________________________________
-    @staticmethod
-    def is_equal(board1, board2):
-        if board1.n == board2.n:
-            for element in board1.b:
+    def is_equal(self, board2):
+        if self.n == board2.n:
+            for element in self.b:
                 status = False
                 for e in board2.b:
                     if element.row == e.row and element.col == e.col:
@@ -151,13 +150,73 @@ class Board :
         else:
             return False
 #____________________________________________________________________________________
-
-    def av_status(self, ball):
-        if isinstance(ball, (Purbleballs, Redballs)):
-            status = []
-            for i in range(1, self.n+1):
-                for j in range(1, self.n+1):
-                    board = self.move(ball.row, ball.col, i, j)
-                    if board is not False:
-                        status.insert(0, board)
+    def av_status(self):
+        status = []
+        for ball in self.b:
+            if isinstance(ball, (Purbleballs, Redballs)):
+                for i in range(1, self.n+1):
+                    for j in range(1, self.n+1):
+                        board = self.move(ball.row, ball.col, i, j)
+                        if board is not False:
+                            status.append(board)
             return status
+#___________________________________________________________________________________
+    def build_tree(self):
+        root = TreeNode(self)
+        return root
+#____________________________________________________________________________________
+    def BFS_Search(self):
+        root = self.build_tree()
+        queue = [root]
+        target = None
+        while True:
+            if queue != []:
+                nood = queue.pop(0)
+                if nood.board.solved():
+                    target = nood
+                    break
+                else:
+                    create_tree(nood)
+                    for child in nood.children:
+                        queue.append(child)
+            else:
+                print("there is no solution")
+                return
+        result = []
+        while target is not None:
+            result.insert(0, target)
+            target = target.parent
+        i = 1
+        for r in result:
+            print (Fore.WHITE + "___",i,"___")
+            r.board.Printboard()
+            i+=1
+        return
+#________________________________________________________________________________
+    def DFS_Search(self):
+        root = self.build_tree()
+        queue = [root]
+        target = None
+        while True:
+            if queue != []:
+                nood = queue.pop()
+                if nood.board.solved():
+                    target = nood
+                    break
+                else:
+                    create_tree(nood)
+                    for child in nood.children:
+                        queue.append(child)
+            else:
+                print("There is no solution")
+                return
+        result = []
+        while target is not None:
+            result.insert(0, target)
+            target = target.parent
+        i = 1
+        for r in result:
+            print (Fore.WHITE + "___",i,"___")
+            r.board.Printboard()
+            i+=1
+        return

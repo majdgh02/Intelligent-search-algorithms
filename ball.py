@@ -24,7 +24,7 @@ class Purbleballs(Ball):
     def __init__(self, row , col):
         Ball.__init__(self, row, col)
     
-    def move(self, board):
+    def move_effict(self, board):
         for element in board.b:
             if isinstance(element, (Purbleballs, Redballs, Metalballs)):
                 if element.row > self.row and element.col == self.col:
@@ -44,7 +44,7 @@ class Redballs(Ball):
     def __init__(self, row , col):
         Ball.__init__(self, row, col)
 
-    def move(self, board):
+    def move_effict(self, board):
         for element in board.b:
             if isinstance(element, (Purbleballs, Redballs, Metalballs)):
                 if element.row > self.row+1 and element.col == self.col:

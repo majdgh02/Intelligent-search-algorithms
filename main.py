@@ -68,23 +68,30 @@ try:
             board = b19
         elif level == 20:
             board = b20
-        while True:
             board.Printboard()
-            row = int(input("Enter the ball row "))
-            col = int(input("Enter the ball col "))
-            t_row = int(input("Enter the distination row "))
-            t_col = int(input("Enter the distination col "))
-            b1 = board.move(row, col, t_row, t_col)
-            if b1 is not False:
-                board = b1
-                status = board.solved()
-                if status is True:
-                    break
-        board.Printboard()
-        print(Fore.CYAN + "''Congratulations''")
-        print(Fore.RESET + "  ")
+        print("if you want to play this game enter p")
+        print("if you want to solve this game in BFS enter b")
+        print("if you want to solve this game in DFS enter d")
+        solve_s = input("input: ")
+        if solve_s == "p":
+            while True:
+                board.Printboard()
+                row = int(input("Enter the ball row "))
+                col = int(input("Enter the ball col "))
+                t_row = int(input("Enter the distination row "))
+                t_col = int(input("Enter the distination col "))
+                b1 = board.move(row, col, t_row, t_col)
+                if b1 is not False:
+                    board = b1
+                    status = board.solved()
+                    if status is True:
+                        break
+            board.Printboard()
+            print(Fore.CYAN + "''Congratulations''")
+            print(Fore.RESET + "  ")
+        elif solve_s == "b":
+            board.BFS_Search()
+        elif solve_s == "d":
+            board.DFS_Search()
 except ValueError:
             print("Invaild Input!, Please Enter integers only")
-
-    
-
